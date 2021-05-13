@@ -1,4 +1,4 @@
-package com.example.c196projectdanadams.view;
+package com.example.c196projectdanadams.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,8 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.c196projectdanadams.R;
+import com.example.c196projectdanadams.ui.terms.TermListActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class HomePageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToTermList(View view) {
-        Intent intent = new Intent(MainActivity.this, TermList.class);
+        Intent intent = new Intent(HomePageActivity.this, TermListActivity.class);
         startActivity(intent);
     }
 }

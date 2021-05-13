@@ -9,19 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.C196ProjectDanAdams">
-        <activity android:name=".view.AssessmentEdit"
+        <activity android:name=".ui.assessments.AssessmentEditActivity"
             android:label="Assessment"
-            android:parentActivityName="view.CourseEditAssessmentList"/>
-        <activity android:name=".view.CourseEditAssessmentList"
+            android:parentActivityName=".ui.courses.CourseEditAssessmentListActivity"/>
+        <activity android:name=".ui.courses.CourseEditAssessmentListActivity"
             android:label="Course and Assessments"
-            android:parentActivityName="view.TermEditCourseList"/>
-        <activity android:name=".view.TermEditCourseList"
+            android:parentActivityName=".ui.terms.TermEditCourseListActivity"/>
+        <activity android:name=".ui.terms.TermEditCourseListActivity"
             android:label="Term and Courses"
-            android:parentActivityName="view.TermList"/>
-        <activity android:name=".view.TermList"
+            android:parentActivityName=".ui.terms.TermListActivity"/>
+        <activity android:name=".ui.terms.TermListActivity"
             android:label="Terms"
-            android:parentActivityName="view.MainActivity"/>
-        <activity android:name=".view.MainActivity">
+            android:parentActivityName=".ui.HomePageActivity"/>
+        <activity android:name=".ui.HomePageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
