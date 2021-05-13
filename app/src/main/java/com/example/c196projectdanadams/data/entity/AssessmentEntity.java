@@ -15,6 +15,7 @@ public class AssessmentEntity {
     private String assessmentTitle;
     private AssessmentType assessmentType;
     private Date endDate;
+
     private int courseID;
 
     public AssessmentEntity(int assessmentID, String assessmentTitle, AssessmentType assessmentType, Date endDate, int courseID) {
