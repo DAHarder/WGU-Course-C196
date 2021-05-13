@@ -15,12 +15,14 @@ public class AssessmentEntity {
     private String assessmentTitle;
     private AssessmentType assessmentType;
     private Date endDate;
+    private int courseID;
 
-    public AssessmentEntity(int assessmentID, String assessmentTitle, AssessmentType assessmentType, Date endDate) {
+    public AssessmentEntity(int assessmentID, String assessmentTitle, AssessmentType assessmentType, Date endDate, int courseID) {
         this.assessmentID = assessmentID;
         this.assessmentTitle = assessmentTitle;
         this.assessmentType = assessmentType;
         this.endDate = endDate;
+        this.courseID = courseID;
     }
 
     public int getAssessmentID() {
@@ -53,5 +55,13 @@ public class AssessmentEntity {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public int getCourseID() {
+        return courseID;
+    }
+
+    public void setCourseID(int courseID) {
+        this.courseID = courseID;
     }
 }
