@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity(tableName = "course_Table")
 public class CourseEntity {
@@ -13,21 +14,23 @@ public class CourseEntity {
     private int courseID;
 
     private String courseTitle;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private CourseStatus status;
+    private String courseNotes;
     private String instructorName;
     private String instructorPhone;
     private String instructorEmail;
 
     private int termID;
 
-    public CourseEntity(int courseID, String courseTitle, Date startDate, Date endDate, CourseStatus status, String instructorName, String instructorPhone, String instructorEmail, int termID) {
+    public CourseEntity(int courseID, String courseTitle, LocalDate startDate, LocalDate endDate, CourseStatus status, String courseNotes, String instructorName, String instructorPhone, String instructorEmail, int termID) {
         this.courseID = courseID;
         this.courseTitle = courseTitle;
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
+        this.courseNotes = courseNotes;
         this.instructorName = instructorName;
         this.instructorPhone = instructorPhone;
         this.instructorEmail = instructorEmail;
@@ -50,19 +53,19 @@ public class CourseEntity {
         this.courseTitle = courseTitle;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
@@ -72,6 +75,14 @@ public class CourseEntity {
 
     public void setStatus(CourseStatus status) {
         this.status = status;
+    }
+
+    public String getCourseNotes() {
+        return courseNotes;
+    }
+
+    public void setCourseNotes(String courseNotes) {
+        this.courseNotes = courseNotes;
     }
 
     public String getInstructorName() {

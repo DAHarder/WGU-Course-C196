@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity(tableName = "assessment_table")
 public class AssessmentEntity {
@@ -14,11 +15,11 @@ public class AssessmentEntity {
 
     private String assessmentTitle;
     private AssessmentType assessmentType;
-    private Date endDate;
+    private LocalDate endDate;
 
     private int courseID;
 
-    public AssessmentEntity(int assessmentID, String assessmentTitle, AssessmentType assessmentType, Date endDate, int courseID) {
+    public AssessmentEntity(int assessmentID, String assessmentTitle, AssessmentType assessmentType, LocalDate endDate, int courseID) {
         this.assessmentID = assessmentID;
         this.assessmentTitle = assessmentTitle;
         this.assessmentType = assessmentType;
@@ -50,11 +51,11 @@ public class AssessmentEntity {
         this.assessmentType = assessmentType;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

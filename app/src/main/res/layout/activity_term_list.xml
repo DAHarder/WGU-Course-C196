@@ -6,15 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".ui.terms.TermListActivity">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="25dp"
-        android:clickable="true"
-        android:onClick="goToTermEditCourseList"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add"
-        android:contentDescription="Add Term"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/term_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="-146dp"
+            tools:listitem="@layout/term_list_item" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Add Term"
+            android:layout_marginTop="10dp"
+            android:onClick="goToTermEditCourseList"
+            style="@style/button_style"
+            android:text="Add Term"
+            app:layout_constraintTop_toBottomOf="@+id/term_recyclerview" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
