@@ -134,7 +134,7 @@
                 tools:listitem="@layout/course_list_item" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/addCourse"
                 style="@style/button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -41,10 +41,10 @@ public class SampleData {
 
         public static List<AssessmentEntity> getSampleAssessments() {
             List<AssessmentEntity> assessments = new ArrayList<>();
-            assessments.add(new AssessmentEntity(0, "Sample Assessment 1", AssessmentType.OA, DATE, 0));
-            assessments.add(new AssessmentEntity(1, "Sample Assessment 2", AssessmentType.PA, DATE, 0));
-            assessments.add(new AssessmentEntity(2, "Sample Assessment 3", AssessmentType.PA, DATE, 0));
-            assessments.add(new AssessmentEntity(3, "Sample Assessment 4", AssessmentType.OA, DATE, 0));
+            assessments.add(new AssessmentEntity(0, "Sample Assessment 1", AssessmentType.OA, DATE, DATE.plusMonths(1),0));
+            assessments.add(new AssessmentEntity(1, "Sample Assessment 2", AssessmentType.PA, DATE, DATE.plusMonths(1),0));
+            assessments.add(new AssessmentEntity(2, "Sample Assessment 3", AssessmentType.PA, DATE, DATE.plusMonths(1),1));
+            assessments.add(new AssessmentEntity(3, "Sample Assessment 4", AssessmentType.OA, DATE, DATE.plusMonths(1),1));
 
 
             return assessments;

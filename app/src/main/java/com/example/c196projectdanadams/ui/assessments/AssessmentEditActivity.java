@@ -3,8 +3,13 @@ package com.example.c196projectdanadams.ui.assessments;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -14,11 +19,13 @@ import com.example.c196projectdanadams.R;
 import com.example.c196projectdanadams.data.database.ScheduleRepository;
 import com.example.c196projectdanadams.data.entity.AssessmentEntity;
 import com.example.c196projectdanadams.data.entity.AssessmentType;
-import com.example.c196projectdanadams.data.entity.CourseEntity;
 import com.example.c196projectdanadams.ui.courses.CourseEditAssessmentListActivity;
 import com.example.c196projectdanadams.util.DatePickerFragment;
 import com.example.c196projectdanadams.util.DateUtils;
+import com.example.c196projectdanadams.util.Receiver;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.time.ZoneId;
 import java.util.List;
 
 public class AssessmentEditActivity extends AppCompatActivity {
@@ -32,6 +39,7 @@ public class AssessmentEditActivity extends AppCompatActivity {
     RadioButton OARadio;
     RadioButton PARadio;
     EditText endDate;
+    EditText startDate;
     int courseID;
 
     AssessmentEntity currentAssessment;
@@ -61,6 +69,7 @@ public class AssessmentEditActivity extends AppCompatActivity {
         OARadio = findViewById(R.id.assessment_OA);
         PARadio = findViewById(R.id.assessment_PA);
         endDate = findViewById(R.id.assessment_end_date_edit);
+        startDate = findViewById(R.id.assessment_start_date_edit);
 
         if (currentAssessment != null){
             assessmentTitle.setText(currentAssessment.getAssessmentTitle());
@@ -73,7 +82,46 @@ public class AssessmentEditActivity extends AppCompatActivity {
                     break;
             }
             endDate.setText(currentAssessment.getEndDate().format(DateUtils.dtf));
+            startDate.setText(currentAssessment.getStartDate().format(DateUtils.dtf));
         }
+    }
+
+
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_assessment, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.notificationAssessStart) {
+            Snackbar mySnackbar = Snackbar.make(findViewById(R.id.assessment_snackbar), "Notification for Start date Set", Snackbar.LENGTH_LONG);
+            mySnackbar.show();
+            Intent intentStart = new Intent(AssessmentEditActivity.this, Receiver.class);
+            intentStart.putExtra("courseAlert","Course " + assessmentTitle.getText().toString() + " starts today");
+            PendingIntent senderStart = PendingIntent.getBroadcast(AssessmentEditActivity.this,++CourseEditAssessmentListActivity.numAlert,intentStart,0);
+            AlarmManager alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
+            long startDateMillis = DateUtils.parseDate(startDate.getText().toString()).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, startDateMillis, senderStart);
+            return true;
+        }
+        if (id == R.id.notificationAssessEnd) {
+            Snackbar mySnackbar = Snackbar.make(findViewById(R.id.assessment_snackbar), "Notification for End date Set", Snackbar.LENGTH_LONG);
+            mySnackbar.show();
+            Intent intentEnd = new Intent(AssessmentEditActivity.this, Receiver.class);
+            intentEnd.putExtra("courseAlert","Course " + assessmentTitle.getText().toString() + " ends today");
+            PendingIntent senderEnd = PendingIntent.getBroadcast(AssessmentEditActivity.this,++CourseEditAssessmentListActivity.numAlert,intentEnd,0);
+            AlarmManager alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
+            long endDateMillis = DateUtils.parseDate(endDate.getText().toString()).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, endDateMillis, senderEnd);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void showDateClickerDialog(View view) {
@@ -92,10 +140,10 @@ public class AssessmentEditActivity extends AppCompatActivity {
             ++assessmentID;
         }
         if (OARadio.isChecked()) {
-            assessment = new AssessmentEntity(assessmentID, assessmentTitle.getText().toString(), AssessmentType.OA, DateUtils.parseDate(endDate.getText().toString()),courseID);
+            assessment = new AssessmentEntity(assessmentID, assessmentTitle.getText().toString(), AssessmentType.OA, DateUtils.parseDate(startDate.getText().toString()), DateUtils.parseDate(endDate.getText().toString()),courseID);
         }
         else if (PARadio.isChecked()){
-            assessment = new AssessmentEntity(assessmentID, assessmentTitle.getText().toString(), AssessmentType.PA, DateUtils.parseDate(endDate.getText().toString()),courseID);
+            assessment = new AssessmentEntity(assessmentID, assessmentTitle.getText().toString(), AssessmentType.PA, DateUtils.parseDate(startDate.getText().toString()), DateUtils.parseDate(endDate.getText().toString()),courseID);
         }
         scheduleRepository.insert(assessment);
 

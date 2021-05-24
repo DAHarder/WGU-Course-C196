@@ -49,12 +49,12 @@ public class CourseEditAssessmentListAdapter extends RecyclerView.Adapter<Course
         }
     }
 
-    @NonNull
     @Override
     public AssessmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(R.layout.assessment_list_item, parent, false);
         return new AssessmentViewHolder(itemView);
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull AssessmentViewHolder holder, int position) {

@@ -22,7 +22,7 @@
             tools:listitem="@layout/term_list_item" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/addAssessment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="Add Term"

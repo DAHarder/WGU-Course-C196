@@ -25,7 +25,7 @@ import java.time.ZoneOffset;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {TermEntity.class, CourseEntity.class, AssessmentEntity.class}, version = 1)
+@Database(entities = {TermEntity.class, CourseEntity.class, AssessmentEntity.class}, version = 2)
 @TypeConverters({DateConverter.class, CourseStatusConverter.class, AssessmentTypeConverter.class})
 public abstract class ScheduleDatabase extends RoomDatabase {
     public abstract AssessmentDao assessmentDao();

@@ -15,14 +15,16 @@ public class AssessmentEntity {
 
     private String assessmentTitle;
     private AssessmentType assessmentType;
+    private LocalDate startDate;
     private LocalDate endDate;
 
     private int courseID;
 
-    public AssessmentEntity(int assessmentID, String assessmentTitle, AssessmentType assessmentType, LocalDate endDate, int courseID) {
+    public AssessmentEntity(int assessmentID, String assessmentTitle, AssessmentType assessmentType, LocalDate startDate, LocalDate endDate, int courseID) {
         this.assessmentID = assessmentID;
         this.assessmentTitle = assessmentTitle;
         this.assessmentType = assessmentType;
+        this.startDate = startDate;
         this.endDate = endDate;
         this.courseID = courseID;
     }
@@ -65,5 +67,13 @@ public class AssessmentEntity {
 
     public void setCourseID(int courseID) {
         this.courseID = courseID;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 }

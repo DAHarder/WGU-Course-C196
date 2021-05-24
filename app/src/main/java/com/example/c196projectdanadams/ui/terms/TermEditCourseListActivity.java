@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -43,6 +44,8 @@ public class TermEditCourseListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_edit_course_list);
 
+        Button addCourseBtn = (Button) findViewById(R.id.addCourse);
+
 
 //------Fill Term Edit Fields if editing a Term-----------------//
         id=getIntent().getIntExtra("termID", -1);
@@ -65,6 +68,8 @@ public class TermEditCourseListActivity extends AppCompatActivity {
             startDate = currentTerm.getStartDate();
             endDate = currentTerm.getEndDate();
         }
+        else
+            addCourseBtn.setVisibility(View.GONE);
         if(id != -1){
             editTitle.setText(title);
             editStartDate.setText(startDate.format(DateUtils.dtf));

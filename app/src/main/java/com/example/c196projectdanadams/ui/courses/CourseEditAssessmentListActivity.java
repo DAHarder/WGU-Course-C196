@@ -5,11 +5,17 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,15 +29,23 @@ import com.example.c196projectdanadams.ui.assessments.AssessmentEditActivity;
 import com.example.c196projectdanadams.ui.terms.TermEditCourseListActivity;
 import com.example.c196projectdanadams.util.DatePickerFragment;
 import com.example.c196projectdanadams.util.DateUtils;
+import com.example.c196projectdanadams.util.Receiver;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class CourseEditAssessmentListActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private ScheduleRepository scheduleRepository;
 
+    public static int numAlert;
+
     public static int termID = -1;
+
+    Calendar calendarInstance = Calendar.getInstance();
 
     int courseID;
     EditText courseTitle;
@@ -55,11 +69,14 @@ public class CourseEditAssessmentListActivity extends AppCompatActivity implemen
         //Set Course Status Spinner Contents
         setSpinnerContents();
         //Set Variables
+        Button addAssessmentBtn = (Button) findViewById(R.id.addAssessment);
         courseID = getIntent().getIntExtra("courseID", -1);
         termID = getIntent().getIntExtra("termID", -1);
         //Set variable to return back to correct Course Entity from Assessment
-        if (courseID == -1)
+        if (courseID == -1) {
             courseID = AssessmentEditActivity.courseIdAssEditPage;
+            addAssessmentBtn.setVisibility(View.GONE);
+        }
         if (termID == -1)
             termID = AssessmentEditActivity.termIdAssEditPage;
         //If not creating a new Entity, fills out current fields
@@ -107,6 +124,53 @@ public class CourseEditAssessmentListActivity extends AppCompatActivity implemen
         adapter.setAssessments(filteredAssessmentList);
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_course, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.share) {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, courseTitle.getText().toString() + " " + courseNotes.getText().toString());
+            // (Optional) Here we're setting the title of the content
+            sendIntent.putExtra(Intent.EXTRA_TITLE, courseTitle.getText().toString() + " Notes");
+            sendIntent.setType("text/plain");
+
+            Intent shareIntent = Intent.createChooser(sendIntent, null);
+            startActivity(shareIntent);
+            return true;
+        }
+        if (id == R.id.notificationStart) {
+            Snackbar mySnackbar = Snackbar.make(findViewById(R.id.course_snackbar), "Notification for Start date Set", Snackbar.LENGTH_LONG);
+            mySnackbar.show();
+            Intent intentStart = new Intent(CourseEditAssessmentListActivity.this, Receiver.class);
+            intentStart.putExtra("courseAlert","Course " + courseTitle.getText().toString() + " starts today");
+            PendingIntent senderStart = PendingIntent.getBroadcast(CourseEditAssessmentListActivity.this,++numAlert,intentStart,0);
+            AlarmManager alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
+            long startDateMillis = DateUtils.parseDate(startDate.getText().toString()).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, startDateMillis, senderStart);
+            return true;
+        }
+        if (id == R.id.notificationEnd) {
+            Snackbar mySnackbar = Snackbar.make(findViewById(R.id.course_snackbar), "Notification for End date Set", Snackbar.LENGTH_LONG);
+            mySnackbar.show();
+            Intent intentEnd = new Intent(CourseEditAssessmentListActivity.this, Receiver.class);
+            intentEnd.putExtra("courseAlert","Course " + courseTitle.getText().toString() + " ends today");
+            PendingIntent senderEnd = PendingIntent.getBroadcast(CourseEditAssessmentListActivity.this,++numAlert,intentEnd,0);
+            AlarmManager alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
+            long endDateMillis = DateUtils.parseDate(endDate.getText().toString()).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, endDateMillis, senderEnd);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     public void setSpinnerContents() {
         //------Spinner selection options ----//

@@ -33,6 +33,7 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
             super(itemView);
             termItemView = itemView.findViewById(R.id.term_item_text_view);
             itemView.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick (View v) {
                     int position = getAdapterPosition();
@@ -44,6 +45,7 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
                 }
             });
         }
+
     }
 
     @Override
