@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.c196projectdanadams.R;
+import com.example.c196projectdanadams.data.entity.AssessmentEntity;
 import com.example.c196projectdanadams.data.entity.CourseEntity;
 import com.example.c196projectdanadams.data.entity.TermEntity;
 import com.example.c196projectdanadams.ui.courses.CourseEditAssessmentListActivity;
@@ -22,6 +23,7 @@ public class TermEditCourseListAdapter extends RecyclerView.Adapter<TermEditCour
     private final LayoutInflater mInflater;
     private final Context context;
     private List<CourseEntity> mCourses;
+    private List<AssessmentEntity> mAssessments;
 
     public TermEditCourseListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -30,10 +32,12 @@ public class TermEditCourseListAdapter extends RecyclerView.Adapter<TermEditCour
 
     class CourseViewHolder extends RecyclerView.ViewHolder {
         private final TextView courseItemView;
+        private final TextView assessmentItemView;
 
         private CourseViewHolder(View itemView){
             super(itemView);
             courseItemView = itemView.findViewById(R.id.course_item_text_view);
+            assessmentItemView = itemView.findViewById(R.id.course_assessment_list);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick (View v) {
@@ -62,6 +66,16 @@ public class TermEditCourseListAdapter extends RecyclerView.Adapter<TermEditCour
             final CourseEntity currentCourse = mCourses.get(position);
             holder.courseItemView.setText((currentCourse.getCourseTitle()));
 
+            String filteredAssessmentList = "";
+            for (AssessmentEntity assessment: mAssessments){
+                if (assessment.getCourseID() == currentCourse.getCourseID())
+                    filteredAssessmentList = filteredAssessmentList + assessment.getAssessmentTitle() + "\n";
+            }
+            if (filteredAssessmentList != "")
+                holder.assessmentItemView.setText(filteredAssessmentList);
+            else
+                holder.assessmentItemView.setVisibility(View.GONE);
+
         } else {
             holder.courseItemView.setText("no title");
         }
@@ -77,5 +91,13 @@ public class TermEditCourseListAdapter extends RecyclerView.Adapter<TermEditCour
     public void setCourses(List<CourseEntity> courses) {
         mCourses = courses;
         notifyDataSetChanged();
+    }
+
+    public void setAssessments(List<AssessmentEntity> assessments) {
+        mAssessments = assessments;
+        notifyDataSetChanged();
+    }
+    public CourseEntity getCourseAt(int position) {
+        return mCourses.get(position);
     }
 }

@@ -11,15 +11,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.c196projectdanadams.R;
+import com.example.c196projectdanadams.data.database.ScheduleRepository;
+import com.example.c196projectdanadams.data.entity.CourseEntity;
 import com.example.c196projectdanadams.data.entity.TermEntity;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder> {
 
     private final LayoutInflater mInflater;
     private final Context context;
-    private List<TermEntity> mTerms;
+    public List<TermEntity> mTerms;
+    private List<CourseEntity> mCourses;
+
 
     public TermAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -28,10 +35,13 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
 
     class TermViewHolder extends RecyclerView.ViewHolder {
         private final TextView termItemView;
+        private final TextView courseItemList;
 
         private TermViewHolder(View itemView){
             super(itemView);
             termItemView = itemView.findViewById(R.id.term_item_text_view);
+            courseItemList = itemView.findViewById(R.id.term_course_list);
+
             itemView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -61,6 +71,16 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
             final TermEntity currentTerm = mTerms.get(position);
             holder.termItemView.setText((currentTerm.getTermTitle()));
 
+            String filteredCourseEntityList = "";
+            for(CourseEntity course: mCourses) {
+                if (course.getTermID() == currentTerm.getTermID())
+                    filteredCourseEntityList = filteredCourseEntityList + course.getCourseTitle() + "\n";
+            }
+            if (filteredCourseEntityList != "")
+                holder.courseItemList.setText(filteredCourseEntityList);
+            else
+                holder.courseItemList.setVisibility(View.GONE);
+
         } else {
             holder.termItemView.setText("no text");
         }
@@ -76,6 +96,15 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
     public void setTerms(List<TermEntity> terms) {
         mTerms = terms;
         notifyDataSetChanged();
+    }
+
+    public void setCourses(List<CourseEntity> courses) {
+        mCourses = courses;
+        notifyDataSetChanged();
+    }
+
+    public TermEntity getTermAt(int position) {
+        return mTerms.get(position);
     }
 
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.c196projectdanadams.R;
 import com.example.c196projectdanadams.data.entity.AssessmentEntity;
+import com.example.c196projectdanadams.data.entity.TermEntity;
 import com.example.c196projectdanadams.ui.assessments.AssessmentEditActivity;
 import com.example.c196projectdanadams.ui.terms.TermEditCourseListActivity;
 
@@ -79,5 +80,9 @@ public class CourseEditAssessmentListAdapter extends RecyclerView.Adapter<Course
     public void setAssessments(List<AssessmentEntity> assessments) {
         mAssessments = assessments;
         notifyDataSetChanged();
+    }
+
+    public AssessmentEntity getAssessmentAt(int position) {
+        return mAssessments.get(position);
     }
 }

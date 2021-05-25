@@ -2,6 +2,7 @@ package com.example.c196projectdanadams.ui.terms;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,14 +12,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.c196projectdanadams.R;
 import com.example.c196projectdanadams.data.database.ScheduleRepository;
 import com.example.c196projectdanadams.data.entity.CourseEntity;
 import com.example.c196projectdanadams.data.entity.TermEntity;
+import com.example.c196projectdanadams.ui.assessments.AssessmentEditActivity;
 import com.example.c196projectdanadams.ui.courses.CourseEditAssessmentListActivity;
 import com.example.c196projectdanadams.util.DatePickerFragment;
 import com.example.c196projectdanadams.util.DateUtils;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -46,7 +50,6 @@ public class TermEditCourseListActivity extends AppCompatActivity {
 
         Button addCourseBtn = (Button) findViewById(R.id.addCourse);
 
-
 //------Fill Term Edit Fields if editing a Term-----------------//
         id=getIntent().getIntExtra("termID", -1);
         if(id == -1)
@@ -68,9 +71,12 @@ public class TermEditCourseListActivity extends AppCompatActivity {
             startDate = currentTerm.getStartDate();
             endDate = currentTerm.getEndDate();
         }
-        else
+        else {
             addCourseBtn.setVisibility(View.GONE);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_close_24);
+        }
         if(id != -1){
+
             editTitle.setText(title);
             editStartDate.setText(startDate.format(DateUtils.dtf));
             editEndDate.setText(endDate.format(DateUtils.dtf));
@@ -82,7 +88,29 @@ public class TermEditCourseListActivity extends AppCompatActivity {
         final TermEditCourseListAdapter adapter = new TermEditCourseListAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setAssociatedCourses(adapter);
 
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                scheduleRepository.delete(adapter.getCourseAt(viewHolder.getAdapterPosition()));
+                setAssociatedCourses(adapter);
+                Snackbar snackbar = Snackbar.make(findViewById(R.id.snackbar_termedit), "Course deleted", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        }).attachToRecyclerView(recyclerView);
+
+        if (getIntent().getBooleanExtra("courseSaved", false))
+            Toast.makeText(this,"Course Saved",Toast.LENGTH_LONG).show();
+    }
+
+    public void setAssociatedCourses(TermEditCourseListAdapter adapter){
         List<CourseEntity> filteredCourseEntityList = new ArrayList<>();
         for(CourseEntity course: scheduleRepository.getAllCourses()){
             if (course.getTermID() == id)
@@ -90,15 +118,21 @@ public class TermEditCourseListActivity extends AppCompatActivity {
         }
         numCourses = filteredCourseEntityList.size();
         adapter.setCourses(filteredCourseEntityList);
+        adapter.setAssessments(scheduleRepository.getAllAssessments());
     }
-
     public void goToCourseEditAssessmentList(View view) {
         Intent intent = new Intent(TermEditCourseListActivity.this, CourseEditAssessmentListActivity.class);
         intent.putExtra("termID", id);
+        AssessmentEditActivity.courseIdAssEditPage = -1;
         startActivity(intent);
     }
 
     public void addTermFromScreen(View view) {
+        if (editTitle.getText().toString().trim().isEmpty() || editStartDate.getText().toString().trim().isEmpty() || editEndDate.getText().toString().isEmpty()) {
+            Toast.makeText(this, "All fields must be filled prior to saving Term", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         TermEntity term;
 
         if (id != -1)
@@ -111,6 +145,7 @@ public class TermEditCourseListActivity extends AppCompatActivity {
         scheduleRepository.insert(term);
 
         Intent intent = new Intent(TermEditCourseListActivity.this, TermListActivity.class);
+        intent.putExtra("termSaved",true);
         startActivity(intent);
     }
 

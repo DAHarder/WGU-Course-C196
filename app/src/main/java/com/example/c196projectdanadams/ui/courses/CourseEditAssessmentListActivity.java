@@ -9,6 +9,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,8 +18,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.c196projectdanadams.R;
 import com.example.c196projectdanadams.data.database.ScheduleRepository;
@@ -57,6 +60,8 @@ public class CourseEditAssessmentListActivity extends AppCompatActivity implemen
     EditText editInstructorPhone;
     EditText editInstructorEmail;
 
+    ImageView courseNotesImage;
+
     CourseEntity currentCourse;
 
     public static int numAssessments;
@@ -75,7 +80,6 @@ public class CourseEditAssessmentListActivity extends AppCompatActivity implemen
         //Set variable to return back to correct Course Entity from Assessment
         if (courseID == -1) {
             courseID = AssessmentEditActivity.courseIdAssEditPage;
-            addAssessmentBtn.setVisibility(View.GONE);
         }
         if (termID == -1)
             termID = AssessmentEditActivity.termIdAssEditPage;
@@ -91,6 +95,7 @@ public class CourseEditAssessmentListActivity extends AppCompatActivity implemen
         courseTitle = findViewById(R.id.course_title_edit);
         startDate = findViewById(R.id.course_start_date_edit);
         endDate = findViewById(R.id.course_end_date_edit);
+        courseNotesImage = findViewById(R.id.course_notes_image);
         courseNotes = findViewById(R.id.course_notes_edit_text);
         courseStatus = findViewById(R.id.course_status_spinner);
         editInstructorName = findViewById(R.id.instructor_name_edit_text);
@@ -107,6 +112,13 @@ public class CourseEditAssessmentListActivity extends AppCompatActivity implemen
             editInstructorPhone.setText(currentCourse.getInstructorPhone());
             editInstructorEmail.setText(currentCourse.getInstructorEmail());
          }
+         else {
+             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_close_24);
+             addAssessmentBtn.setVisibility(View.GONE);
+         }
+
+         courseNotes.setVisibility(View.GONE);
+         courseNotesImage.setVisibility(View.GONE);
 
         //------Set and show associated Assessments-----------------//
         scheduleRepository = new ScheduleRepository(getApplication());
@@ -122,6 +134,9 @@ public class CourseEditAssessmentListActivity extends AppCompatActivity implemen
         }
         numAssessments = filteredAssessmentList.size();
         adapter.setAssessments(filteredAssessmentList);
+
+        if (getIntent().getBooleanExtra("assessmentSaved", false))
+            Toast.makeText(this,"Assessment Saved",Toast.LENGTH_LONG).show();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -168,6 +183,10 @@ public class CourseEditAssessmentListActivity extends AppCompatActivity implemen
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, endDateMillis, senderEnd);
             return true;
         }
+        if (id == R.id.showNotes) {
+            courseNotes.setVisibility(View.VISIBLE);
+            courseNotesImage.setVisibility(View.VISIBLE);
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -205,6 +224,16 @@ public class CourseEditAssessmentListActivity extends AppCompatActivity implemen
     }
 
     public void addCourseFromScreen(View view) {
+        if (courseTitle.getText().toString().trim().isEmpty() ||
+        startDate.getText().toString().trim().isEmpty() ||
+        endDate.getText().toString().trim().isEmpty() ||
+        editInstructorName.getText().toString().trim().isEmpty() ||
+        editInstructorPhone.getText().toString().trim().isEmpty() ||
+        editInstructorPhone.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "All fields must be filled prior to saving Course", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         CourseEntity course;
 
         if (courseID == -1) {
@@ -229,6 +258,7 @@ public class CourseEditAssessmentListActivity extends AppCompatActivity implemen
         scheduleRepository.insert(course);
 
         Intent intent = new Intent(CourseEditAssessmentListActivity.this, TermEditCourseListActivity.class);
+        intent.putExtra("courseSaved",true);
         startActivity(intent);
     }
 

@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.c196projectdanadams.R;
 import com.example.c196projectdanadams.data.database.ScheduleRepository;
@@ -84,6 +85,8 @@ public class AssessmentEditActivity extends AppCompatActivity {
             endDate.setText(currentAssessment.getEndDate().format(DateUtils.dtf));
             startDate.setText(currentAssessment.getStartDate().format(DateUtils.dtf));
         }
+        else
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_close_24);
     }
 
 
@@ -132,6 +135,11 @@ public class AssessmentEditActivity extends AppCompatActivity {
     }
 
     public void addAssessmentFromScreen(View view) {
+        if (assessmentTitle.getText().toString().trim().isEmpty() || startDate.getText().toString().trim().isEmpty() || endDate.getText().toString().trim().isEmpty() || (!OARadio.isChecked() && !PARadio.isChecked())){
+            Toast.makeText(this, "All fields must be filled prior to saving Assessment", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         AssessmentEntity assessment = null;
 
         if (assessmentID == -1) {
@@ -148,6 +156,7 @@ public class AssessmentEditActivity extends AppCompatActivity {
         scheduleRepository.insert(assessment);
 
         Intent intent = new Intent(AssessmentEditActivity.this, CourseEditAssessmentListActivity.class);
+        intent.putExtra("assessmentSaved",true);
         startActivity(intent);
     }
 }

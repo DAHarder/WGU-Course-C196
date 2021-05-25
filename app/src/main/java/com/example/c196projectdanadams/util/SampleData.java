@@ -20,21 +20,21 @@ public class SampleData {
 
         public static List<TermEntity> getSampleTerms() {
             List<TermEntity> terms = new ArrayList<>();
-            terms.add(new TermEntity(0, "Sample Title 1" , DATE, DATE.plusMonths(3)));
-            terms.add(new TermEntity(1, "Sample Title 2" , DATE.plusMonths(3), DATE.plusMonths(6)));
-            terms.add(new TermEntity(2, "Sample Title 3" , DATE.plusMonths(6), DATE.plusMonths(9)));
+            terms.add(new TermEntity(0, "Term 1" , DATE, DATE.plusMonths(3)));
+            terms.add(new TermEntity(1, "Term 2" , DATE.plusMonths(3), DATE.plusMonths(6)));
+            terms.add(new TermEntity(2, "Term 3" , DATE.plusMonths(6), DATE.plusMonths(9)));
 
             return terms;
         }
 
         public static List<CourseEntity> getSampleCourses() {
             List<CourseEntity> courses = new ArrayList<>();
-            courses.add(new CourseEntity(0, "Sample Course 1", DATE, DATE.plusMonths(1),  CourseStatus.IN_PROGRESS, "Test course notes to be completed, first assignment due, contact instructor, etc stuff", "Jimmy Johnson","541-555-555", "JJohnson@email.com", 0));
-            courses.add(new CourseEntity(1, "Sample Course 2", DATE.plusMonths(1), DATE.plusMonths(2),  CourseStatus.DROPPED, "Test Course Notes", "Jimmy Johnson","541-555-555", "JJohnson@email.com", 0));
-            courses.add(new CourseEntity(2, "Sample Course 3", DATE.plusMonths(2), DATE.plusMonths(3),  CourseStatus.PLAN_TO_TAKE, "Test Course Notes", "Jimmy Johnson","541-555-555", "JJohnson@email.com", 0));
-            courses.add(new CourseEntity(3, "Sample Course 4", DATE, DATE.plusMonths(1),  CourseStatus.IN_PROGRESS, "Test Course Notes", "James Reed","541-555-555", "JReed@email.com", 1));
-            courses.add(new CourseEntity(4, "Sample Course 5", DATE.plusMonths(1), DATE.plusMonths(3),  CourseStatus.IN_PROGRESS, "Test Course Notes", "James Reed","541-555-555", "JReed@@email.com", 1));
-            courses.add(new CourseEntity(5, "Sample Course 6", DATE, DATE.plusMonths(3),  CourseStatus.IN_PROGRESS, "Test Course Notes", "Mary Clancy","541-555-555", "MClancy@email.com", 2));
+            courses.add(new CourseEntity(0, "Math Course", DATE, DATE.plusMonths(1),  CourseStatus.IN_PROGRESS, "Test course notes to be completed, first assignment due, contact instructor, etc stuff", "Jimmy Johnson","541-555-555", "JJohnson@email.com", 0));
+            courses.add(new CourseEntity(1, "English Course", DATE.plusMonths(1), DATE.plusMonths(2),  CourseStatus.DROPPED, "Test Course Notes", "Jimmy Johnson","541-555-555", "JJohnson@email.com", 0));
+            courses.add(new CourseEntity(2, "History Course", DATE.plusMonths(2), DATE.plusMonths(3),  CourseStatus.PLAN_TO_TAKE, "Test Course Notes", "Jimmy Johnson","541-555-555", "JJohnson@email.com", 0));
+            courses.add(new CourseEntity(3, "Geography Course", DATE, DATE.plusMonths(1),  CourseStatus.IN_PROGRESS, "Test Course Notes", "James Reed","541-555-555", "JReed@email.com", 1));
+            courses.add(new CourseEntity(4, "Politics Course", DATE.plusMonths(1), DATE.plusMonths(3),  CourseStatus.IN_PROGRESS, "Test Course Notes", "James Reed","541-555-555", "JReed@@email.com", 1));
+            courses.add(new CourseEntity(5, "Computer Science Course", DATE, DATE.plusMonths(3),  CourseStatus.IN_PROGRESS, "Test Course Notes", "Mary Clancy","541-555-555", "MClancy@email.com", 2));
 
             return courses;
         }
