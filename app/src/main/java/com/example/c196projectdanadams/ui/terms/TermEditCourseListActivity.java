@@ -88,7 +88,14 @@ public class TermEditCourseListActivity extends AppCompatActivity {
         final TermEditCourseListAdapter adapter = new TermEditCourseListAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        setAssociatedCourses(adapter);
+        List<CourseEntity> filteredCourseEntityList = new ArrayList<>();
+        for(CourseEntity course: scheduleRepository.getAllCourses()){
+            if (course.getTermID() == id)
+                filteredCourseEntityList.add(course);
+        }
+        numCourses = filteredCourseEntityList.size();
+        adapter.setCourses(filteredCourseEntityList);
+        adapter.setAssessments(scheduleRepository.getAllAssessments());
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT) {
@@ -100,7 +107,8 @@ public class TermEditCourseListActivity extends AppCompatActivity {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 scheduleRepository.delete(adapter.getCourseAt(viewHolder.getAdapterPosition()));
-                setAssociatedCourses(adapter);
+                adapter.mCourses.remove(viewHolder.getAdapterPosition());
+                adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                 Snackbar snackbar = Snackbar.make(findViewById(R.id.snackbar_termedit), "Course deleted", Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
@@ -110,16 +118,7 @@ public class TermEditCourseListActivity extends AppCompatActivity {
             Toast.makeText(this,"Course Saved",Toast.LENGTH_LONG).show();
     }
 
-    public void setAssociatedCourses(TermEditCourseListAdapter adapter){
-        List<CourseEntity> filteredCourseEntityList = new ArrayList<>();
-        for(CourseEntity course: scheduleRepository.getAllCourses()){
-            if (course.getTermID() == id)
-                filteredCourseEntityList.add(course);
-        }
-        numCourses = filteredCourseEntityList.size();
-        adapter.setCourses(filteredCourseEntityList);
-        adapter.setAssessments(scheduleRepository.getAllAssessments());
-    }
+
     public void goToCourseEditAssessmentList(View view) {
         Intent intent = new Intent(TermEditCourseListActivity.this, CourseEditAssessmentListActivity.class);
         intent.putExtra("termID", id);

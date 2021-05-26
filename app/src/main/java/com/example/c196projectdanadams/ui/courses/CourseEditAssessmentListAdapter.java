@@ -22,7 +22,7 @@ public class CourseEditAssessmentListAdapter extends RecyclerView.Adapter<Course
 
     private final LayoutInflater mInflater;
     private final Context context;
-    private List<AssessmentEntity> mAssessments;
+    public List<AssessmentEntity> mAssessments;
 
     public CourseEditAssessmentListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);

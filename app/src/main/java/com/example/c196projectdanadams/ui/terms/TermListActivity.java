@@ -34,6 +34,9 @@ public class TermListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_term_list);
 
         scheduleRepository = new ScheduleRepository(getApplication());
+        scheduleRepository.getAllTerms();
+        scheduleRepository.getAllCourses();
+        scheduleRepository.getAllAssessments();
 
         RecyclerView recyclerView = findViewById(R.id.term_recyclerview);
 

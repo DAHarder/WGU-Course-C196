@@ -22,7 +22,7 @@ public class TermEditCourseListAdapter extends RecyclerView.Adapter<TermEditCour
 
     private final LayoutInflater mInflater;
     private final Context context;
-    private List<CourseEntity> mCourses;
+    public List<CourseEntity> mCourses;
     private List<AssessmentEntity> mAssessments;
 
     public TermEditCourseListAdapter(Context context) {

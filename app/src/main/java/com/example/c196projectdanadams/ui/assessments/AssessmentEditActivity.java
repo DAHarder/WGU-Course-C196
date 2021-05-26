@@ -52,6 +52,7 @@ public class AssessmentEditActivity extends AppCompatActivity {
         //Set Variables
         System.out.println(courseIdAssEditPage);
         courseIdAssEditPage = getIntent().getIntExtra("courseID", -1);
+        courseID = getIntent().getIntExtra("courseID", -1);
         assessmentID = getIntent().getIntExtra("assessmentID", -1);
         termIdAssEditPage = getIntent().getIntExtra("termID", -1);
 

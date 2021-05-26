@@ -2,6 +2,7 @@ package com.example.c196projectdanadams.ui.courses;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -134,6 +135,26 @@ public class CourseEditAssessmentListActivity extends AppCompatActivity implemen
         }
         numAssessments = filteredAssessmentList.size();
         adapter.setAssessments(filteredAssessmentList);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                scheduleRepository.delete(adapter.getAssessmentAt(viewHolder.getAdapterPosition()));
+                adapter.mAssessments.remove(viewHolder.getAdapterPosition());
+                adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                Snackbar snackbar = Snackbar.make(findViewById(R.id.course_snackbar), "Assessment deleted", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        }).attachToRecyclerView(recyclerView);
+
+        if (getIntent().getBooleanExtra("courseSaved", false))
+            Toast.makeText(this,"Course Saved",Toast.LENGTH_LONG).show();
 
         if (getIntent().getBooleanExtra("assessmentSaved", false))
             Toast.makeText(this,"Assessment Saved",Toast.LENGTH_LONG).show();
