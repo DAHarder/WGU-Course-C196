@@ -238,6 +238,10 @@ public class CourseEditAssessmentListActivity extends AppCompatActivity implemen
     }
 
     public void goToAssessmentEdit(View view) {
+        if (numAssessments > 4){
+            Toast.makeText(this, "Each course can only have a maximum of 5 Assessments", Toast.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent(CourseEditAssessmentListActivity.this, AssessmentEditActivity.class);
         intent.putExtra("courseID", courseID);
         intent.putExtra("termID", termID);
